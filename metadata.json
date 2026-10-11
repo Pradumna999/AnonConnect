@@ -1,0 +1,11 @@
+{
+  "name": "PulsePeer - Anonymous Video & Text Chat",
+  "description": "Production-ready anonymous random video and text chat platform built with WebRTC P2P and Firebase Realtime Database.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

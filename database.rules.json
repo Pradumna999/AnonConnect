@@ -1,0 +1,53 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "queue": {
+      ".read": false,
+      ".write": false,
+      ".indexOn": ["mode", "status", "expiresAt", "interest"]
+    },
+
+    "clientState": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": false
+      }
+    },
+
+    "rooms": {
+      "$roomId": {
+        ".read": "auth != null && (data.child('participantA').val() === auth.uid || data.child('participantB').val() === auth.uid)",
+        ".write": false
+      }
+    },
+
+    "inboxes": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$eventId": {
+          ".write": "auth != null && auth.uid === $uid && !newData.exists()"
+        }
+      }
+    },
+
+    "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['status', 'updatedAt']) && (newData.child('status').val() === 'online' || newData.child('status').val() === 'offline') && newData.child('updatedAt').isNumber()"
+      }
+    },
+
+    "roomPresence": {
+      "$roomId": {
+        "$uid": {
+          ".read": "auth != null && (root.child('rooms/' + $roomId + '/participantA').val() === auth.uid || root.child('rooms/' + $roomId + '/participantB').val() === auth.uid)",
+          ".write": "auth != null && auth.uid === $uid && (root.child('rooms/' + $roomId + '/participantA').val() === auth.uid || root.child('rooms/' + $roomId + '/participantB').val() === auth.uid)",
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    }
+  }
+}
